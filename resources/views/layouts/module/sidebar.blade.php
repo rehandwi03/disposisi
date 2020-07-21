@@ -98,13 +98,13 @@
                         <div id="submenu-2" class="collapse submenu bg-white" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('role.index')}}">Role</a>
+                                    <a class="nav-link" href="{{ route('role.index')}}">Kelola Role</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('unit.index')}}">Unit</a>
+                                    <a class="nav-link" href="{{ route('unit.index')}}">Kelola Unit</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('user.index')}}">User</a>
+                                    <a class="nav-link" href="{{route('user.index')}}">Kelola User</a>
                                 </li>
                             </ul>
                         </div>
@@ -134,7 +134,7 @@
                     <li class="nav-item ">
                         <a class="nav-link text-light" href="{{route('validasi_surat.index')}}"><i class="fa fa-fw fa-check-square text-light
                     "></i>
-                            Validasi</a>
+                            Validasi Kartu Kendali</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link text-light" href="{{route('buku_agenda.index')}}"><i class="fa fa-fw fa-book text-light

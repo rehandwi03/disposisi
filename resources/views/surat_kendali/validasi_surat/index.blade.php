@@ -37,7 +37,7 @@ Validasi
                             @forelse ($vd as $row)
                             <tr>
                                 <td>{{ $row->kartu_kendali_id }}</td>
-                                <td>{{ $row->jenis_surat->deskripsi }}</td>
+                                <td>{{ $row->jenis_surat->deskripsi_surat }}</td>
                                 <td>{{ $row->unit->unit_name }}</td>
                                 <td>{{ $row->perihal }}</td>
                                 <td>{{ $row->tanggal_pembuatan }}</td>
@@ -46,7 +46,7 @@ Validasi
                                         @if ($row->status_kartu_kendali == 0)
                                         <a href="{{route('verif_surat.index',$row->kartu_kendali_id)}}"
                                             class="badge badge-danger">
-                                            <i class="fas fa-clone"></i> Surat
+                                            <i class="fas fa-clone"></i> Kode
                                         </a>
                                         @else
                                         @endif

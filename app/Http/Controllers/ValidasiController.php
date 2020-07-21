@@ -78,6 +78,6 @@ class ValidasiController extends Controller
             'status_kartu_kendali' => 1
         ]);
 
-        return redirect(route('validasi_surat.index'))->with(['success' => 'Surat Berhasil Diverifikasi']);
+        return redirect(route('validasi_surat.index'))->with(['success' => 'Berhasil Diverifikasi']);
     }
 }

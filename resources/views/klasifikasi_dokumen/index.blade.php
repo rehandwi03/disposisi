@@ -46,13 +46,12 @@ Manajemen Klasifikasi Dokumen
                 @endslot
 
                 <div class="table-responsive">
-                    <table class="table table-hover" id="example">
+                    <table class="table table-hover text-center" id="example">
                         <thead>
                             <tr>
                                 <td>#</td>
                                 <td>Kode Dokumen</td>
                                 <td>Deskripsi</td>
-                                <td>Created At</td>
                                 <td>Aksi</td>
                             </tr>
                         </thead>
@@ -62,8 +61,7 @@ Manajemen Klasifikasi Dokumen
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $dkm->kode_dokumen }}</td>
-                                <td>{{ $dkm->deskripsi }}</td>
-                                <td>{{ $dkm->created_at }}</td>
+                                <td>{{ $dkm->deskripsi_dokumen }}</td>
                                 <td>
                                     <form
                                         action="{{ route('klasifikasi_dokumen.destroy', $dkm->klasifikasi_dokumen_id) }}"

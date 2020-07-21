@@ -23,7 +23,7 @@ Account
                         <div class="text-center">
                             <h2 class="font-24 mb-0">{{ Auth::user()->nama_lengkap }}</h2>
                             @foreach (Auth::user()->getRoleNames() as $rl)
-                            {{ $rl }}
+                            <label for="" class="badge badge-info">{{ $rl }}</label>
                             @endforeach
                             <p></p>
                         </div>

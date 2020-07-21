@@ -1,15 +1,15 @@
 @extends('layouts.master')
 @section('title')
-<title>Show Kartu Kendali</title>
+<title>Tampil Kartu Kendali</title>
 @endsection
 @section('content')
 @section('pageheader')
-Show Kartu Kendali
+Tampil Kartu Kendali
 @endsection
 @section('b-item')
 <li class="breadcrumb-item" aria-current="page"><a href="{{ route('surat_masuk.index') }}">Proses Kartu Kendali</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Show Kartu Kendali
+<li class="breadcrumb-item active" aria-current="page">Tampil
 </li>
 @endsection
 <section class="content">
@@ -47,41 +47,28 @@ Show Kartu Kendali
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <h5 class="mb-3">No : {{ $sm[0]->kartu_kendali->kartu_kendali_id }}
+                                        <h5 class="mb-3">No : {{ $sm->kartu_kendali_id }}
                                         </h5>
-                                        <h5 class="mb-1">Perihal : {{$sm[0]->kartu_kendali->perihal}}</h5>
+                                        <h5 class="mb-1">Perihal : {{$sm->perihal}}</h5>
                                     </div>
                                     <div class="col-sm-3">
                                         <h5 class="mb-3">Kode :
-                                            {{ $sm[0]->kartu_kendali->klasifikasi_dokumen->kode_dokumen }}</h5>
+                                            {{ $sm->klasifikasi_dokumen->kode_dokumen }}</h5>
                                         <h5 class="mb-1">Tanggal :
-                                            {{date('d F yy', strtotime($sm[0]->kartu_kendali->tanggal_pembuatan))}}
+                                            {{date('d F yy', strtotime($sm->tanggal_pembuatan))}}
                                         </h5>
                                     </div>
                                     <div class="col-sm-3">
-                                        @foreach ($js as $row)
-                                        @php
-                                        $checked=($sm[0]->kartu_kendali->jenis_surat_id == $row->jenis_surat_id)?
-                                        "checked" : "";
-                                        @endphp
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" disabled
-                                                {{ $checked }}><span class="custom-control-label">{{$row->kode_surat}}
-                                            </span>
-                                        </label>
-                                        @endforeach
-                                    </div>
-                                    <div class="col-sm-3">
-                                        {{-- @foreach ($ls as $row)
-                                        @php
-                                        $checked=($sm[0]->kartu_kendali->lokasi_kartu->lokasi_kartu_id ==
-                                        $row->lokasi_kartu_id)?
-                                        "checked" : "";
-                                        @endphp
-                                        @endforeach --}}
                                         <label class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" disabled checked><span
-                                                class="custom-control-label">{{$sm[0]->kartu_kendali->lokasi_kartu->nama_lokasi}}
+                                                class="custom-control-label">{{$sm->jenis_surat->deskripsi_surat}}
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" disabled checked><span
+                                                class="custom-control-label">{{$sm->lokasi_kartu->nama_lokasi}}
                                             </span>
                                         </label>
                                     </div>
@@ -97,9 +84,11 @@ Show Kartu Kendali
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($sm as $row)
+                                            @foreach ($sm->isi_kartu as $row)
                                             <tr>
-                                                <td class="center">{{ $row->tanggal_membalas }}</td>
+                                                <td class="center">
+                                                    {{date('d F yy', strtotime($row->tanggal_membalas))}}
+                                                </td>
                                                 <td class="center">{{ $row->from }}</td>
                                                 <td class="center">{{ $row->to }}</td>
                                                 <td class="center">{{ $row->disposisi }}</td>
@@ -141,27 +130,18 @@ Show Kartu Kendali
                                 <div class="carousel-item">
                                     <img class="d-block w-100" src="../assets/images/card-img-3.jpg" alt="Third slide">
                                 </div> --}}
-                                @php
-                                $no = 0;
-                                @endphp
-                                @foreach ($sm as $data)
-                                @foreach ($data->lampiran as $lm)
-                                {{-- @php
-                                $active=($lm->lampiran == $unt->unit_id)? "selected" : "";
-                                @endphp --}}
-                                <?php
-                                $no++;
-                                if ($no == 1) {
-                                    $active = 'active';
-                                }else{
-                                    $active = '';
-                                }
-                                ?>
-                                <div class="carousel-item {{$active}}">
-                                    <img src="{{ asset('uploads/lampiran/'. $lm->nama_lampiran) }}" class="img-fluid">
+
+                                @forelse ($sm->isi_kartu as $item)
+                                @forelse ($item->lampiran as $row)
+                                <div class="carousel-item active">
+                                    <img src="{{ asset('uploads/lampiran/'. $row->nama_lampiran) }}" class="img-fluid">
                                 </div>
-                                @endforeach
-                                @endforeach
+                                @empty
+
+                                @endforelse
+                                @empty
+
+                                @endforelse
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ Manajemen Role
                         <input id="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name"
                             type="text" name="name">
                         <div class="invalid-feedback">
-                            {{ $errors->first('name') }}
+                            Masukan nama role.
                         </div>
                     </div>
                     @slot('footer')

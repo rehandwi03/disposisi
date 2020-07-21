@@ -32,11 +32,7 @@ class HomeController extends Controller
         $user = Auth::user()->unit_id;
         $unit = Unit::select('unit_name')->where('unit_id', '=', $user)->first();
         $role = Auth::user()->getRoleNames();
-        $jkk = KartuKendali::with('isi_kartu')->whereHas('isi_kartu', function ($q) use ($unit) {
-            $q->where([
-                ['from', $unit->unit_name]
-            ]);
-        })->count();
+        $jkk = KartuKendali::with('isi_kartu')->where('unit_id', '=', $user)->count();
         if ($role[0] == 'Admin') {
             $juser = User::count();
             $junit = Unit::count();
@@ -51,6 +47,16 @@ class HomeController extends Controller
             $sek = KartuKendali::where('jenis_surat_id', '=', 3)->count();
             // dd($si);
             return view('layouts.module.admin', compact('uvs', 'vs', 'skk', 'jkk', 'si', 'sem', 'sek'));
+        } else {
+            $uvs = KartuKendali::where([
+                ['status_kartu_kendali', '=', 0],
+                ['unit_id', '=', $user]
+            ])->count();
+            $vs = KartuKendali::where([
+                ['status_kartu_kendali', '=', 1],
+                ['unit_id', '=', $user]
+            ])->count();
+            return view('layouts.module.admin', compact('jkk', 'uvs', 'vs'));
         }
     }
 }

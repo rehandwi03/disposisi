@@ -13,7 +13,7 @@ class KlasifikasiTableSeeder extends Seeder
     {
         KlasifikasiDokumen::create([
             'kode_dokumen' => 'A.1',
-            'deskripsi' => 'Produk Hukum'
+            'deskripsi_dokumen' => 'Produk Hukum'
         ]);
     }
 }

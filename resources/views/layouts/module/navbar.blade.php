@@ -124,7 +124,9 @@
         <div class="nav-user-info">
             <h5 class="mb-0 text-white nav-user-name">{{ Auth::user()->nama_lengkap }}</h5>
             @foreach (Auth::user()->getRoleNames() as $row)
-            <span class="status"></span><span class="ml-2">{{ $row }}</span>
+            <label for="" class="badge badge-info">
+                <span class="ml-2">{{ $row }}</span>
+            </label>
             @endforeach
         </div>
         <a class="dropdown-item" href="{{ route('account.index') }}"><i class="fas fa-user mr-2"></i>Account</a>

@@ -21,7 +21,7 @@ Buku Agenda
                 </a> --}}
                 @endslot
                 <div class="table-responsive">
-                    <table class="table table-hover display" id="example">
+                    <table class="table table-hover display text-center" id="example">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -57,7 +57,7 @@ Buku Agenda
                                     }
                                     @endphp
                                     <sup class="label label-{{$status}}">{{$pesan}}</sup>
-                                    {{ $row->jenis_surat->deskripsi }}
+                                    {{ $row->jenis_surat->deskripsi_surat }}
                                 </td>
                                 <td>{{ $row->isi_kartu[0]->from }}</td>
                                 <td>{{ $row->isi_kartu[0]->to }}</td>
@@ -68,7 +68,7 @@ Buku Agenda
                                 <td>
                                     <form action="" method="POST" class="form-check">
                                         <a href="{{ route('surat_masuk.show', $row->kartu_kendali_id) }}"
-                                            class="badge badge-primary"><i class="fas fa-clipboard-list"></i> Lihat</a>
+                                            class="badge badge-primary"><i class="fas fa-clipboard-list"></i> Tampil</a>
                                         {{-- @csrf
                                         @method('PUT')
                                         @if ($row->status_kartu_kendali === 3)

@@ -1,13 +1,13 @@
 @extends('layouts.master')
 @section('title')
-<title>Buat Surat Keluar</title>
+<title>Pengajuan Kartu Kendali</title>
 @endsection
 @section('content')
 @section('pageheader')
-Surat Keluar
+Pengajuan Kartu Kendali
 @endsection
 @section('b-item')
-<li class="breadcrumb-item" aria-current="page"><a href="{{ route('surat_keluar.index') }}">Surat Keluar</a>
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('surat_keluar.index') }}">Pengajuan Kartu Kendali</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Tambah
 </li>
@@ -79,7 +79,7 @@ Surat Keluar
             <div class="col-md-12">
                 @card
                 @slot('title')
-                Keterangan Surat
+                Keterangan Kartu Kendali
                 @endslot
                 <form id="form" method="post" action="{{route('surat_keluar.store')}}" enctype="multipart/form-data">
                     @csrf
@@ -91,7 +91,7 @@ Surat Keluar
                                 <option value="">Pilih Jenis Surat</option>
                                 @forelse ($js as $row)
                                 <option value="{{$row->jenis_surat_id}}">{{ $row->kode_surat }} -
-                                    {{ $row->deskripsi }}</option>
+                                    {{ $row->deskripsi_surat }}</option>
                                 @empty
 
                                 @endforelse
@@ -128,7 +128,7 @@ Surat Keluar
 
                     @card
                     @slot('title')
-                    Isi Surat
+                    Isi Kartu Kendali
                     @endslot
                     <form id="form" data-parsley-validate="" novalidate="">
                         <div class="form-group row">

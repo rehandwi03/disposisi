@@ -46,7 +46,7 @@ Manajemen Lokasi Kartu
                             <tr>
                                 <td>#</td>
                                 <td>Lokasi Kartu</td>
-                                <td>Created At</td>
+                                <td>Tanggal Pembuatan</td>
                                 <td>Aksi</td>
                             </tr>
                         </thead>

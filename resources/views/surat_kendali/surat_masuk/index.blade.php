@@ -21,14 +21,12 @@ Proses Kartu Kendali
                 </a> --}}
                 @endslot
                 <div class="table-responsive">
-                    <table class="table table-hover" id="example">
+                    <table class="table table-hover text-center" id="example">
                         <thead>
                             <tr>
                                 <th>Nomor</th>
                                 <th>Keterangan Surat</th>
                                 <th>Dari Unit</th>
-                                {{-- <th>Nomor</th>
-                                <th>Kode</th> --}}
                                 <th>Perihal</th>
                                 <th>Tanggal</th>
                                 <th>Aksi</th>
@@ -38,12 +36,9 @@ Proses Kartu Kendali
                             @php $no = 1; @endphp
                             @forelse ($sm as $row)
                             <tr>
-                                {{-- <td>{{ $no++ }}</td> --}}
                                 <td>{{ $row->kartu_kendali_id }}</td>
-                                <td>{{ $row->jenis_surat->deskripsi }}</td>
+                                <td>{{ $row->jenis_surat->deskripsi_surat }}</td>
                                 <td>{{ $row->unit->unit_name }}</td>
-                                {{-- <td>{{ $row->buku_agenda->nomor_agenda }}</td>
-                                <td>{{ $row->klasifikasi_dokumen->kode_dokumen }}</td> --}}
                                 <td>{{ $row->perihal }}</td>
                                 <td>{{date('d F yy', strtotime($row->tanggal_pembuatan))}}
                                 </td>
@@ -57,7 +52,7 @@ Proses Kartu Kendali
                                         <input type="hidden" name="_method" value="DELETE">
                                         <a href="{{route('surat_masuk.show', $row->kartu_kendali_id)}}"
                                             class="badge badge-primary">
-                                            <i class="fas fa-eye"></i> Lihat
+                                            <i class="fas fa-eye"></i> Tampil
                                         </a>
                                         {{-- <button class="btn btn-danger btn-sm btn-delete">
                                             <i class="fas fa-trash"></i>
@@ -77,6 +72,7 @@ Proses Kartu Kendali
                 ​
                 @endslot
                 @endcard
+
             </div>
         </div>
     </div>

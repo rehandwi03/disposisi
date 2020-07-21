@@ -16,7 +16,7 @@ class CreateJenisSuratsTable extends Migration
         Schema::create('jenis_surat', function (Blueprint $table) {
             $table->increments('jenis_surat_id', true);
             $table->string('kode_surat', 5);
-            $table->text('deskripsi');
+            $table->text('deskripsi_surat');
             $table->softDeletes();
             $table->timestamps();
         });

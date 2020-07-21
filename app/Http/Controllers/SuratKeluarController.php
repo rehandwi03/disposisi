@@ -38,7 +38,7 @@ class SuratKeluarController extends Controller
         $unit = Auth::user()->unit_id;
         $unit2 = Unit::where('unit_id', '=', $unit)->select('unit_name')->get();
         $unit_name = $unit2[0]->unit_name;
-        $sk = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->whereHas(
+        $sk = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi_surat', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->whereHas(
             'isi_kartu',
             function ($q) use ($unit) {
                 $q->where([
@@ -255,7 +255,7 @@ class SuratKeluarController extends Controller
             $kartu_kendali = KartuKendali::where('kartu_kendali_id', '=', $id)->update([
                 'status_kartu_kendali' => 3
             ]);
-            return redirect(route('surat_keluar.index'))->with(['success' => 'Surat Berhasil Diselesaikan !']);
+            return redirect(route('surat_keluar.index'))->with(['success' => 'Berhasil Diselesaikan !']);
         } catch (\Throwable $th) {
             return redirect(route('surat_keluar.index'))->with(['error' => 'Surat Gagal Diselesaikan!']);
         }
@@ -263,22 +263,27 @@ class SuratKeluarController extends Controller
 
     public function cetakPdf($id)
     {
-        $js = JenisSurat::all();
-        $sm = IsiKartu::with('kartu_kendali.jenis_surat', 'kartu_kendali.klasifikasi_dokumen', 'kartu_kendali.unit', 'lampiran')->whereHas(
-            'kartu_kendali',
-            function ($q) use ($id) {
-                $q->where([
-                    ['kartu_kendali_id', $id],
-                    ['status_isi_kartu', 1]
-                ])->orWhere([
-                    ['kartu_kendali_id', $id],
-                    ['status_isi_kartu', 0]
-                ]);
-            }
-        )->get();
+        // $js = JenisSurat::all();
+        // $sm = IsiKartu::with('kartu_kendali.jenis_surat', 'kartu_kendali.klasifikasi_dokumen', 'kartu_kendali.unit', 'lampiran')->whereHas(
+        //     'kartu_kendali',
+        //     function ($q) use ($id) {
+        //         $q->where([
+        //             ['kartu_kendali_id', $id],
+        //             ['status_isi_kartu', 1]
+        //         ])->orWhere([
+        //             ['kartu_kendali_id', $id],
+        //             ['status_isi_kartu', 0]
+        //         ]);
+        //     }
+        // )->get();
+        $sm = KartuKendali::with('isi_kartu.lampiran','klasifikasi_dokumen','lokasi_kartu','jenis_surat')->whereHas('isi_kartu', function($q) use ($id){
+            $q->where([
+                ['status_isi_kartu', 1]
+            ]);
+        })->findOrFail($id);
         // dd($js);
         // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView('surat_kendali.surat_keluar.print', compact('sm', 'js'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('surat_kendali.surat_keluar.print', compact('sm'))->setPaper('a4', 'portrait')->setOption('no-stop-slow-scripts', true);
         return $pdf->stream();
     }
 }

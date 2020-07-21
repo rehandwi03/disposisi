@@ -44,7 +44,7 @@ class JenisSuratController extends Controller
         $surat = JenisSurat::firstOrCreate([
             'kode_surat' => $request->kode_surat
         ], [
-            'deskripsi' => $request->deskripsi
+            'deskripsi_surat' => $request->deskripsi
         ]);
         return redirect()->back()->with(['success' => 'Jenis Surat Berhasil Ditambahkan!']);
     }

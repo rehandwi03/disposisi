@@ -14,7 +14,7 @@ class JenisTableSeeder extends Seeder
     {
         JenisSurat::create([
             'kode_surat' => 'SI',
-            'deskripsi' => 'Surat Internal'
+            'deskripsi_surat' => 'Surat Internal'
         ]);
     }
 }

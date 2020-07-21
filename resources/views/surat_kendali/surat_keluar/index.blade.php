@@ -56,7 +56,7 @@ Pengajuan Kartu Kendali
                                     }
                                     @endphp
                                     <sup class="label label-{{$status}}">{{$pesan}}</sup>
-                                    {{ $row->jenis_surat->deskripsi }}
+                                    {{ $row->jenis_surat->deskripsi_surat }}
                                 </td>
                                 <td>{{ $row->isi_kartu[0]->to }}</td>
                                 {{-- <td>{{ $row->buku_agenda->nomor_agenda }}</td>
@@ -71,7 +71,7 @@ Pengajuan Kartu Kendali
                                         @if ($row->status_kartu_kendali === 3)
                                         <a href="{{ route('surat_masuk.show', $row->kartu_kendali_id) }}"
                                             class="badge badge-primary"><i class="fas fa-clipboard-list"></i>
-                                            Lihat</a>
+                                            Tampil</a>
                                         <a href="{{route('surat_keluar.cetak', $row->kartu_kendali_id)}}"
                                             class="badge badge-success"><i class="fas fa-print"></i>
                                             Cetak</a>

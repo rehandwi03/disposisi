@@ -34,7 +34,7 @@
     <!-- ============================================================== -->
     <div class="splash-container">
         <div class="card ">
-            <div class="card-header text-center"><a href="../index.html"><img class="logo-img"
+            <div class="card-header text-center"><a href="http://binainsani.ac.id"><img class="logo-img"
                         src="{{ asset('/uploads/logo/binainsani.png') }}" alt="logo" width="200"></a><span <div
                     class="card-body">
                     <form action="{{route('login')}}" method="post">
@@ -64,13 +64,13 @@
                         <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
                     </form>
             </div>
-            <div class="card-footer bg-white p-0  ">
+            {{-- <div class="card-footer bg-white p-0  ">
                 <div class="card-footer-item card-footer-item-bordered">
                     <a href="#" class="footer-link">Create An Account</a></div>
                 <div class="card-footer-item card-footer-item-bordered">
                     <a href="#" class="footer-link">Forgot Password</a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 

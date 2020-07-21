@@ -49,7 +49,7 @@ Validasi Kartu Kendali
                     <option value="">Pilih Kode</option>
                     @forelse ($kd as $row)
                     <option value=" {{$row->klasifikasi_dokumen_id}}">
-                        {{$row->kode_dokumen}}-{{$row->deskripsi}}
+                        {{$row->kode_dokumen}}-{{$row->deskripsi_dokumen}}
                     </option>
                     @empty
                     <option value="">Tidak Ada Data</option>
@@ -71,7 +71,7 @@ Validasi Kartu Kendali
 
         @card
         @slot('title')
-        Isi Surat
+        Isi Kartu Kendali
         @endslot
         <form id="form" data-parsley-validate="" novalidate="">
             <div class="form-group row">

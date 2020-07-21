@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class KlasifikasiDokumen extends Model
 {
     protected $table = 'klasifikasi_dokumen';
-    protected $fillable = ['kode_dokumen', 'deskripsi'];
+    protected $fillable = ['kode_dokumen', 'deskripsi_dokumen'];
     protected $primaryKey = 'klasifikasi_dokumen_id';
 
     public function kartu_kendali()

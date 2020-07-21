@@ -15,7 +15,7 @@ class BukuAgendaController extends Controller
      */
     public function index()
     {
-        $ba = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->whereHas(
+        $ba = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi_surat', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->whereHas(
             'isi_kartu'
             // function ($q) use ($unit) {
             //     $q->where([

@@ -44,7 +44,7 @@ class KlasifikasiDokumenController extends Controller
         $dokumen = KlasifikasiDokumen::firstOrCreate([
             'kode_dokumen' => $request->kode_dokumen
         ], [
-            'deskripsi' => $request->deskripsi
+            'deskripsi_dokumen' => $request->deskripsi
         ]);
         return redirect()->back()->with(['success' => 'Klasifikasi Dokumen Berhasil Ditambahkan!']);
     }

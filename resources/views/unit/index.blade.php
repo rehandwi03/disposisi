@@ -25,7 +25,7 @@ Manajemen Unit
                         <input id="unit_name" class="form-control {{ $errors->has('unit_name') ? 'is-invalid':'' }}"
                             id="unit_name" type="text" name="unit_name">
                         <div class="invalid-feedback">
-                            {{ $errors->first('name') }}
+                            Masukan nama unit.
                         </div>
                     </div>
                     @slot('footer')

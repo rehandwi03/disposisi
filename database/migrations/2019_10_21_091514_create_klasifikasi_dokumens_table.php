@@ -16,7 +16,7 @@ class CreateKlasifikasiDokumensTable extends Migration
         Schema::create('klasifikasi_dokumen', function (Blueprint $table) {
             $table->increments('klasifikasi_dokumen_id', true);
             $table->string('kode_dokumen', 5);
-            $table->text('deskripsi');
+            $table->text('deskripsi_dokumen');
             $table->timestamps();
         });
     }

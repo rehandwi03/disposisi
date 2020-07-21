@@ -13,6 +13,11 @@
         .page-break {
             page-break-before: always;
         }
+
+        * {
+            /* Font-size: font_size; */
+            Font-family: Verdana;
+        }
     </style>
 </head>
 
@@ -28,12 +33,12 @@
             <tr>
                 <td width=600>
                     <h5 class="mb-3">No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                        {{ $sm[0]->kartu_kendali->kartu_kendali_id }}
+                        {{ $sm->kartu_kendali_id }}
                     </h5>
                 </td>
                 <td width=300>
                     <h5 class="mb-3">Kode &nbsp;&nbsp;&nbsp;&nbsp;:
-                        {{ $sm[0]->kartu_kendali->klasifikasi_dokumen->kode_dokumen }}</h5>
+                        {{ $sm->klasifikasi_dokumen->kode_dokumen }}</h5>
                 </td>
                 {{-- <td width=300>
                     <input type="checkbox" disabled {{$checked}}> Surat Internal
@@ -42,11 +47,11 @@
             </tr>
             <tr>
                 <td>
-                    <h5 class="mb-1">Perihal &nbsp;: {{$sm[0]->kartu_kendali->perihal}}</h5>
+                    <h5 class="mb-1">Perihal &nbsp;: {{$sm->perihal}}</h5>
                 </td>
                 <td>
                     <h5 class="mb-1">Tanggal :
-                        {{date('d F yy', strtotime($sm[0]->kartu_kendali->tanggal_pembuatan))}}
+                        {{date('d F yy', strtotime($sm->tanggal_pembuatan))}}
                     </h5>
                 </td>
                 {{-- <td width=300>
@@ -62,16 +67,14 @@
         </table>
         <table class="mt-2">
             <tr>
-                @foreach ($js as $data)
-                <td width=300>
-                    @php
-                    $checked=($sm[0]->kartu_kendali->jenis_surat_id == $data->jenis_surat_id)?
-                    "checked" : "";
-                    @endphp
-                    <input type="checkbox" disabled {{$checked}}> {{$data->deskripsi}}
+                <td width=600>
+                    <input type="checkbox" disabled checked> {{$sm->jenis_surat->deskripsi_surat}}
                     <h5 class=""></h5>
                 </td>
-                @endforeach
+                <td>
+                    <input type="checkbox" disabled checked> {{$sm->lokasi_kartu->nama_lokasi}}
+                    <h5 class=""></h5>
+                </td>
             </tr>
         </table>
     </div>
@@ -87,7 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($sm as $row)
+                    @foreach ($sm->isi_kartu as $row)
                     <tr>
                         <td class="center">{{ $row->tanggal_membalas }}</td>
                         <td class="center">{{ $row->from }}</td>
@@ -99,7 +102,7 @@
             </table>
         </div>
     </div>
-    @foreach ($sm as $data)
+    @foreach ($sm->isi_kartu as $data)
     @forelse ($data->lampiran as $lm)
     <div class="page-break text-center">
         <img src="{{ public_path('uploads/lampiran/'. $lm->nama_lampiran) }}" class="img-fluid ">
@@ -108,7 +111,7 @@
     @endforelse
     @endforeach
 
-    <script src="{{ public_path('assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
+    {{-- <script src="{{ public_path('assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script> --}}
 </body>
 
 </html>

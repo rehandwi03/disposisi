@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\IsiKartu;
 use App\JenisSurat;
 use App\KartuKendali;
+use App\LampiranFile;
 use App\LokasiKartu;
 use App\Unit;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,7 @@ class SuratMasukController extends Controller
         $unit = Auth::user()->unit_id;
         $unit2 = Unit::where('unit_id', '=', $unit)->select('unit_name')->get();
         $unit_name = $unit2[0]->unit_name;
-        $sm = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->where('status_kartu_kendali', '=', 1)->whereHas(
+        $sm = KartuKendali::with('jenis_surat:jenis_surat_id,deskripsi_surat', 'klasifikasi_dokumen', 'unit:unit_id,unit_name', 'isi_kartu.unit')->where('status_kartu_kendali', '=', 1)->whereHas(
             'isi_kartu',
             function ($q) use ($unit_name) {
                 $q->where([
@@ -42,7 +43,9 @@ class SuratMasukController extends Controller
 
     public function reply($id)
     {
-        $surat = KartuKendali::findOrFail($id)->with('isi_kartu')->get();
+        // dd($id);
+        $surat = KartuKendali::with('isi_kartu')->findOrFail($id);
+        // dd($surat);
         $ut = Unit::orderBy('unit_name', 'ASC')->get();
         return view('surat_kendali.surat_masuk.reply', compact('surat', 'ut'));
     }
@@ -51,8 +54,10 @@ class SuratMasukController extends Controller
     {
         $this->validate($request, [
             'unit' => 'required|numeric',
-            'disposisi' => 'required|string'
+            'disposisi' => 'required|string',
+            'files.*' => 'nullable|file|mimes:png,jpg,jpeg|max:2048'
         ]);
+        // dd($request);
         $unit = Unit::where('unit_id', '=', $request->unit)->get();
         $unit2 = Unit::where('unit_id', '=', Auth::user()->unit_id)->get();
         $from = $unit2[0]->unit_name;
@@ -65,8 +70,19 @@ class SuratMasukController extends Controller
             'to' => $to,
             'tanggal_membalas' => $tanggal,
             'disposisi' => $request->disposisi,
-            'status_isi_kartu' => 0
+            'status_isi_kartu' => 1
         ]);
+        if ($request->hasFile('files')) {
+            $iki = IsiKartu::max('isi_kartu_id');
+            foreach ($request->file('files') as $file) {
+                $filename = time() . $file->getClientOriginalName();
+                $file->move(public_path() . '/uploads/lampiran/', $filename);
+                LampiranFile::insert([
+                    'isi_kartu_id' => $iki,
+                    'nama_lampiran' => $filename,
+                ]);
+            }
+        }
         return redirect(route('surat_masuk.index'))->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
     /**
@@ -102,22 +118,27 @@ class SuratMasukController extends Controller
         // if (!$check) {
         //     return redirect()->back();
         // }
-        $ls = LokasiKartu::select('lokasi_kartu_id', 'nama_lokasi')->get();
-        $js = JenisSurat::select('jenis_surat_id', 'kode_surat')->get();
-        $sm = IsiKartu::with('kartu_kendali.jenis_surat', 'kartu_kendali.klasifikasi_dokumen', 'kartu_kendali.unit', 'lampiran', 'kartu_kendali.lokasi_kartu')->whereHas(
-            'kartu_kendali',
-            function ($q) use ($id) {
-                $q->where([
-                    ['kartu_kendali_id', $id],
-                    ['status_isi_kartu', 1]
-                ])->orWhere([
-                    ['kartu_kendali_id', $id],
-                    ['status_isi_kartu', 0]
-                ]);
-            }
-        )->get();
-        // dd($sm);
-        return view('surat_kendali.surat_masuk.show', compact('sm', 'js', 'ls'));
+        // $ls = LokasiKartu::select('lokasi_kartu_id', 'nama_lokasi')->get();
+        // $js = JenisSurat::select('jenis_surat_id', 'kode_surat')->get();
+        // $sm = IsiKartu::with('kartu_kendali.jenis_surat', 'kartu_kendali.klasifikasi_dokumen', 'kartu_kendali.unit', 'lampiran', 'kartu_kendali.lokasi_kartu')->whereHas(
+        //     'kartu_kendali',
+        //     function ($q) use ($id) {
+        //         $q->where([
+        //             ['kartu_kendali_id', $id],
+        //             ['status_isi_kartu', 1]
+        //         ])->orWhere([
+        //             ['kartu_kendali_id', $id],
+        //             ['status_isi_kartu', 0]
+        //         ]);
+        //     }
+        // )->get();
+        $sm = KartuKendali::with('isi_kartu.lampiran','klasifikasi_dokumen','lokasi_kartu','jenis_surat')->whereHas('isi_kartu', function($q) use ($id){
+            $q->where([
+                ['status_isi_kartu', 1]
+            ]);
+        })->findOrFail($id);
+        // dd($sm); 
+        return view('surat_kendali.surat_masuk.show', compact('sm'));
     }
 
     /**
