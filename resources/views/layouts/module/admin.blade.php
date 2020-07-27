@@ -28,7 +28,7 @@ HALAMAN UTAMA
                     <h2 class="mb-0"> {{ $uvs }}</h2>
                 </div>
                 <div class="float-right icon-circle-medium  icon-box-lg  bg-danger-light mt-1">
-                    <i class="fas fa-window-close fa-fw fa-sm text-danger"></i>
+                    <i class="fas fa-paste fa-fw fa-sm text-danger"></i>
                 </div>
                 @endrole
                 @role('Unit')

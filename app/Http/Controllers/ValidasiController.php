@@ -53,13 +53,21 @@ class ValidasiController extends Controller
 
     public function verif_surat($id)
     {
+        if ($id == "") {
+            return redirect()->back();
+        }
         $kd = KlasifikasiDokumen::orderBy('kode_dokumen', 'ASC')->get();
         $vs = KartuKendali::with('jenis_surat', 'klasifikasi_dokumen', 'unit', 'isi_kartu.lampiran')->whereHas('isi_kartu', function ($q) use ($id) {
             $q->where([
                 // ['status_isi_kartu', 1],
+                ['status_kartu_kendali', 0],
                 ['kartu_kendali_id', $id]
             ]);
         })->first();
+        if ($vs == "") {
+            return redirect()->route('validasi_surat.index');
+        }
+        // dd($vs);
         $kki = $id;
         // dd($vs);
         return view('surat_kendali.validasi_surat.verif_surat', compact(['vs', 'kd', 'kki']));

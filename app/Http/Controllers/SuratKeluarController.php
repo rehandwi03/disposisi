@@ -67,7 +67,6 @@ class SuratKeluarController extends Controller
     public function create()
     {
         $js = JenisSurat::orderBy('kode_surat', 'ASC')->get();
-
         $kd = KlasifikasiDokumen::orderBy('kode_dokumen', 'ASC')->get();
         $ut = Unit::orderBy('unit_name', 'ASC')->get();
         $lk = LokasiKartu::orderBy('nama_lokasi', 'ASC')->get();
@@ -278,9 +277,13 @@ class SuratKeluarController extends Controller
         // )->get();
         $sm = KartuKendali::with('isi_kartu.lampiran','klasifikasi_dokumen','lokasi_kartu','jenis_surat')->whereHas('isi_kartu', function($q) use ($id){
             $q->where([
-                ['status_isi_kartu', 1]
+                ['status_isi_kartu', 1],
+                ['status_kartu_kendali', 3]
             ]);
         })->findOrFail($id);
+        if ($sm == "") {
+            return redirect()->route('surat_keluar.index');
+        }
         // dd($js);
         // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         $pdf = PDF::loadView('surat_kendali.surat_keluar.print', compact('sm'))->setPaper('a4', 'portrait')->setOption('no-stop-slow-scripts', true);
