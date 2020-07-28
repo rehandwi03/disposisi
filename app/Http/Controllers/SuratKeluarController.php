@@ -10,6 +10,7 @@ use App\KlasifikasiDokumen;
 use App\LokasiKartu;
 use App\Unit;
 use App\LampiranFile;
+use App\User;
 use Dompdf\Options;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ use PDF;
 
 class SuratKeluarController extends Controller
 {
+    protected $email;
     /**
      * Display a listing of the resource.
      *
@@ -111,7 +113,6 @@ class SuratKeluarController extends Controller
      */
     public function store(Request $request)
     {
-
         // dd($request);
         $this->validate($request, [
             'jenis_surat_id' => 'required|numeric',
@@ -121,6 +122,8 @@ class SuratKeluarController extends Controller
             'disposisi' => 'required|string',
             'files.*' => 'nullable|file|mimes:png,jpg,jpeg|max:2048'
         ]);
+
+        //save kartu kendali to tbl kartu kendali
         $tanggal = date('Y-m-d');
         $unit = Auth::user()->unit_id;
         $kartu_kendali = KartuKendali::create([
@@ -132,6 +135,8 @@ class SuratKeluarController extends Controller
             'lokasi_kartu_id' => $request->lokasi_kartu_id,
             'unit_id' => $unit,
         ]);
+
+        // save disposisi to tbl isi kartu
         $current_id = KartuKendali::max('kartu_kendali_id');
         $unit = Unit::where('unit_id', '=', $request->unit)->first();
         $unit2 = Unit::where('unit_id', '=', Auth::user()->unit_id)->first();
@@ -145,6 +150,7 @@ class SuratKeluarController extends Controller
             'disposisi' => $request->disposisi,
             'status_isi_kartu' => 1,
         ]);
+        // save lampiran to folder
         if ($request->hasFile('files')) {
             $iki = IsiKartu::max('isi_kartu_id');
             foreach ($request->file('files') as $file) {
@@ -156,6 +162,25 @@ class SuratKeluarController extends Controller
                 ]);
             }
         }
+
+        // save array sekertariat email to attribute
+        $data = User::whereHas("roles", function ($q) {
+            $q->where("role_name", "Sekertariat");
+        })->get();
+        foreach ($data as $user) {
+            $this->email_to[] = $user->email;
+        }
+        // dd($this->email_to);
+        // send email async with queue
+        $details['email'] = $this->email_to;;
+        $details['subject'] = 'Validasi Kartu Kendali';
+        $details['template'] = 'email.email_validasi';
+        $details['isi_disposisi'] = $request->disposisi;
+        $details['perihal'] = $request->perihal;
+        $details['from'] = $from;
+        $details['kartu_kendali_id'] = $current_id;
+        // $details['to'] = $to;
+        dispatch(new \App\Jobs\SendEmailJob($details));
         return redirect(route('surat_keluar.index'))->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
 
@@ -275,7 +300,7 @@ class SuratKeluarController extends Controller
         //         ]);
         //     }
         // )->get();
-        $sm = KartuKendali::with('isi_kartu.lampiran','klasifikasi_dokumen','lokasi_kartu','jenis_surat')->whereHas('isi_kartu', function($q) use ($id){
+        $sm = KartuKendali::with('isi_kartu.lampiran', 'klasifikasi_dokumen', 'lokasi_kartu', 'jenis_surat')->whereHas('isi_kartu', function ($q) use ($id) {
             $q->where([
                 ['status_isi_kartu', 1],
                 ['status_kartu_kendali', 3]

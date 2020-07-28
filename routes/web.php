@@ -11,8 +11,26 @@
 |
 */
 
+use App\Mail\MailKK;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/testemail', function () {
+    // $details = [
+    //     'title' => 'Disposisi Masuk',
+    //     'body' => 'This is for testing email using smtp'
+    // ];
+
+    // $mail = Mail::to('rehandwi0395@gmail.com')->send(new \App\Mail\MailKK($details));
+    // dd($mail);
+
+    $details['email'] = ['rehandwi0395@gmail.com', 'buatnuyul123@gmail.com'];
+    $details['subject'] = 'Pengajuan Kartu Kendali';
+    $details['template'] = 'email.email_disposisi';
+    dispatch(new App\Jobs\SendEmailJob($details));
+    dd('done');
+});
 
 Route::get('/', function () {
     return redirect(route('login'));

@@ -6,14 +6,14 @@ use App\IsiKartu;
 use App\JenisSurat;
 use App\KartuKendali;
 use App\LampiranFile;
-use App\LokasiKartu;
 use App\Unit;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class SuratMasukController extends Controller
 {
+    public $email_to = [];
     /**
      * Display a listing of the resource.
      *
@@ -58,12 +58,13 @@ class SuratMasukController extends Controller
             'files.*' => 'nullable|file|mimes:png,jpg,jpeg|max:2048'
         ]);
         // dd($request);
-        $unit = Unit::where('unit_id', '=', $request->unit)->get();
-        $unit2 = Unit::where('unit_id', '=', Auth::user()->unit_id)->get();
-        $from = $unit2[0]->unit_name;
-        $to = $unit[0]->unit_name;
+        $unit = Unit::with('users')->where('unit_id', '=', $request->unit)->first();
+        $unit2 = Unit::where('unit_id', '=', Auth::user()->unit_id)->first();
+        $from = $unit2->unit_name;
+        $to = $unit->unit_name;
         $tanggal = date('Y-m-d');
-        // dd($from);
+
+        // save data to database
         $isi = IsiKartu::create([
             'kartu_kendali_id' => $request->kartu_kendali_id,
             'from' => $from,
@@ -72,6 +73,8 @@ class SuratMasukController extends Controller
             'disposisi' => $request->disposisi,
             'status_isi_kartu' => 1
         ]);
+
+        // save lampiran to folder
         if ($request->hasFile('files')) {
             $iki = IsiKartu::max('isi_kartu_id');
             foreach ($request->file('files') as $file) {
@@ -83,6 +86,20 @@ class SuratMasukController extends Controller
                 ]);
             }
         }
+
+        // save array email to attribute
+        foreach ($unit->users as $user) {
+            $this->email_to[] = $user->email;
+        }
+        // send email async with queue
+        $details['email'] = $this->email_to;;
+        $details['subject'] = 'Disposisi Masuk';
+        $details['template'] = 'email.email_disposisi';
+        $details['from'] = $from;
+        $details['isi_disposisi'] = $request->disposisi;
+        $details['kartu_kendali_id'] = $request->kartu_kendali_id;
+        // $details['to'] = $to;
+        dispatch(new \App\Jobs\SendEmailJob($details));
         return redirect(route('surat_masuk.index'))->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
     /**
@@ -132,7 +149,7 @@ class SuratMasukController extends Controller
         //         ]);
         //     }
         // )->get();
-        $sm = KartuKendali::with('isi_kartu.lampiran','klasifikasi_dokumen','lokasi_kartu','jenis_surat')->whereHas('isi_kartu', function($q) use ($id){
+        $sm = KartuKendali::with('isi_kartu.lampiran', 'klasifikasi_dokumen', 'lokasi_kartu', 'jenis_surat')->whereHas('isi_kartu', function ($q) use ($id) {
             $q->where([
                 ['status_isi_kartu', 1]
             ]);

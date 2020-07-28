@@ -13,6 +13,7 @@ class User extends Authenticatable
     use HasRoles;
     protected $guarded = [];
     protected $primaryKey = 'model_id';
+    protected $foreignKey = 'unit_id';
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'unit_id');
