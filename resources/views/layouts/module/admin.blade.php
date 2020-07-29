@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 @section('pageheader')
-HALAMAN UTAMA
+HALAMAN UTAMA ADMIN
 @endsection
 <div class="row">
     <!-- ============================================================== -->
@@ -114,7 +114,7 @@ HALAMAN UTAMA
         <div class="card " style="border-top: solid 3px #9400d4">
             <div class="card-body">
                 <div class="d-inline-block">
-                    <h5 class="text-muted">Kartu Kendali</h5>
+                    <h5 class="text-muted">Jumlah Kartu Kendali</h5>
                     <h2 class="mb-0">{{ $jkk }}</h2>
                 </div>
                 <div class="float-right icon-circle-medium  icon-box-lg  bg-info-light mt-1">
@@ -243,6 +243,42 @@ HALAMAN UTAMA
         </div>
         @endrole
     </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- ============================================================== -->
+        {{-- Keterangan Kartu Kendali --}}
+        <div class="card">
+            <h5 class="card-header">Keterangan Kartu Kendali</h5>
+            <div class="card-body p-0">
+                <ul class="social-sales list-group list-group-flush">
+                    <li class="list-group-item social-sales-content"><span
+                            class="social-sales-icon-circle facebook-bgcolor mr-2"><i
+                                class="fas fa-check"></i></span><span class="social-sales-name"><a
+                                href="{{ route('user.index') }}">Sudah Selesai
+                            </a>
+
+                        </span><span class="social-sales-count text-dark">{{ $kkdone }}
+                            Kartu Kendali</span>
+                    </li>
+                    <li class="list-group-item social-sales-content"><span
+                            class="social-sales-icon-circle twitter-bgcolor mr-2"><i
+                                class="fas fa-sync-alt"></i></span><span class="social-sales-name"><a
+                                href="{{ route('unit.index') }}">Sedang di Proses</a>
+                        </span><span class="social-sales-count text-dark">{{ $kkproses }} Kartu Kendali
+                        </span>
+                    </li>
+                    <li class="list-group-item social-sales-content"><span
+                            class="social-sales-icon-circle pinterest-bgcolor mr-2"><i
+                                class="fas fa-clipboard-check"></i></span><span class="social-sales-name"><a
+                                href="{{ route('role.index') }}">Tahap Validasi</a>
+                        </span><span class="social-sales-count text-dark">{{ $kkunverif }} Kartu Kendali</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 </div>

@@ -33,11 +33,15 @@ class HomeController extends Controller
         $unit = Unit::select('unit_name')->where('unit_id', '=', $user)->first();
         $role = Auth::user()->getRoleNames();
         $jkk = KartuKendali::with('isi_kartu')->where('unit_id', '=', $user)->count();
+        $kkdone = KartuKendali::where([['status_kartu_kendali', '=', 3], ['unit_id', '=', $user]])->count();
+        $kkproses = KartuKendali::where([['status_kartu_kendali', '=', 1], ['unit_id', '=', $user]])->count();
+        $kkunverif = KartuKendali::where([['status_kartu_kendali', '=', 0], ['unit_id', '=', $user]])->count();
+        // dd($kkproses);
         if ($role[0] == 'Admin') {
             $juser = User::count();
             $junit = Unit::count();
             $role = Role::count();
-            return view('layouts.module.admin', compact('juser', 'junit', 'jkk', 'role'));
+            return view('layouts.module.admin', compact('juser', 'junit', 'jkk', 'role', 'kkdone', 'kkproses', 'kkunverif'));
         } elseif ($role[0] == 'Sekertariat') {
             $uvs = KartuKendali::where('status_kartu_kendali', '=', 0)->count();
             $vs = KartuKendali::where('status_kartu_kendali', '=', 1)->count();
@@ -46,7 +50,7 @@ class HomeController extends Controller
             $sem = KartuKendali::where('jenis_surat_id', '=', 2)->count();
             $sek = KartuKendali::where('jenis_surat_id', '=', 3)->count();
             // dd($si);
-            return view('layouts.module.admin', compact('uvs', 'vs', 'skk', 'jkk', 'si', 'sem', 'sek'));
+            return view('layouts.module.sekertariat', compact('uvs', 'vs', 'skk', 'jkk', 'si', 'sem', 'sek', 'kkdone', 'kkproses', 'kkunverif'));
         } else {
             $uvs = KartuKendali::where([
                 ['status_kartu_kendali', '=', 0],
@@ -56,7 +60,7 @@ class HomeController extends Controller
                 ['status_kartu_kendali', '=', 1],
                 ['unit_id', '=', $user]
             ])->count();
-            return view('layouts.module.admin', compact('jkk', 'uvs', 'vs'));
+            return view('layouts.module.unit', compact('jkk', 'uvs', 'vs', 'kkdone', 'kkproses', 'kkunverif'));
         }
     }
 }
